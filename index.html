@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Creative Developer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Scanlines overlay -->
+    <div class="scanlines"></div>
+    
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-logo glitch" data-text="DEV">DEV</div>
+        <ul class="nav-links">
+            <li><a href="#home" class="nav-link active">Home</a></li>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+        <div class="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="tech-eye-container">
+                <div class="tech-eye">
+                    <div class="eye-outer">
+                        <div class="eye-ring ring-1"></div>
+                        <div class="eye-ring ring-2"></div>
+                        <div class="eye-ring ring-3"></div>
+                        <div class="eye-iris">
+                            <div class="iris-pattern"></div>
+                            <div class="eye-pupil">
+                                <div class="pupil-core"></div>
+                                <div class="pupil-glow"></div>
+                            </div>
+                        </div>
+                        <div class="eye-glitch"></div>
+                        <div class="eye-scanline"></div>
+                    </div>
+                    <div class="tech-circuits">
+                        <svg class="circuit-svg" viewBox="0 0 400 400">
+                            <defs>
+                                <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#ff00ff;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path class="circuit-path" d="M200,50 L200,100 M200,300 L200,350" />
+                            <path class="circuit-path" d="M50,200 L100,200 M300,200 L350,200" />
+                            <path class="circuit-path" d="M80,80 L120,120 M280,280 L320,320" />
+                            <path class="circuit-path" d="M320,80 L280,120 M120,280 L80,320" />
+                            <circle class="circuit-node" cx="200" cy="50" r="4" />
+                            <circle class="circuit-node" cx="200" cy="350" r="4" />
+                            <circle class="circuit-node" cx="50" cy="200" r="4" />
+                            <circle class="circuit-node" cx="350" cy="200" r="4" />
+                            <circle class="circuit-node" cx="80" cy="80" r="3" />
+                            <circle class="circuit-node" cx="320" cy="80" r="3" />
+                            <circle class="circuit-node" cx="80" cy="320" r="3" />
+                            <circle class="circuit-node" cx="320" cy="320" r="3" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-text">
+                <p class="hero-subtitle typing-text">// WELCOME TO MY DIGITAL REALM</p>
+                <h1 class="hero-title">
+                    <span class="glitch-text" data-text="CREATIVE">CREATIVE</span>
+                    <span class="glitch-text" data-text="DEVELOPER">DEVELOPER</span>
+                </h1>
+                <p class="hero-description">
+                    Building digital experiences that blur the line between 
+                    <span class="highlight">imagination</span> and <span class="highlight">reality</span>
+                </p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">
+                        <span class="btn-text">View Projects</span>
+                        <span class="btn-glitch"></span>
+                    </a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <span>Scroll Down</span>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">&lt;about&gt;</span>
+                <h2 class="section-title glitch" data-text="WHO AM I">WHO AM I</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-image">
+                    <div class="image-frame">
+                        <div class="frame-corner top-left"></div>
+                        <div class="frame-corner top-right"></div>
+                        <div class="frame-corner bottom-left"></div>
+                        <div class="frame-corner bottom-right"></div>
+                        <div class="image-placeholder">
+                            <div class="avatar-glitch">
+                                <svg viewBox="0 0 100 100" class="avatar-icon">
+                                    <circle cx="50" cy="35" r="20" fill="currentColor"/>
+                                    <path d="M20,90 Q20,60 50,60 Q80,60 80,90" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="image-scanline"></div>
+                    </div>
+                </div>
+                <div class="about-text">
+                    <p class="about-intro">
+                        I'm a <span class="highlight">creative developer</span> passionate about crafting 
+                        immersive digital experiences that push the boundaries of web technology.
+                    </p>
+                    <p>
+                        With expertise in frontend development, creative coding, and interactive design, 
+                        I transform complex ideas into elegant, performant solutions. My work lives at the 
+                        intersection of art and technology.
+                    </p>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-icon">&#60;/&#62;</div>
+                            <span>Frontend</span>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon">⚡</div>
+                            <span>React/Vue</span>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon">🎨</div>
+                            <span>UI/UX</span>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon">✦</div>
+                            <span>Animation</span>
+                        </div>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Three.js</span>
+                        <span class="tech-tag">GSAP</span>
+                    </div>
+                </div>
+            </div>
+            <span class="section-tag closing">&lt;/about&gt;</span>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">&lt;projects&gt;</span>
+                <h2 class="section-title glitch" data-text="MY WORK">MY WORK</h2>
+            </div>
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <article class="project-card">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <span class="project-icon">🌐</span>
+                        </div>
+                        <div class="project-overlay">
+                            <div class="overlay-content">
+                                <a href="#" class="project-link">View Project →</a>
+                            </div>
+                        </div>
+                        <div class="project-glitch"></div>
+                    </div>
+                    <div class="project-info">
+                        <span class="project-number">01</span>
+                        <h3 class="project-title">Cyber Dashboard</h3>
+                        <p class="project-description">A futuristic admin dashboard with real-time data visualization and interactive 3D elements.</p>
+                        <div class="project-tags">
+                            <span>React</span>
+                            <span>Three.js</span>
+                            <span>D3</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 2 -->
+                <article class="project-card">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <span class="project-icon">🎮</span>
+                        </div>
+                        <div class="project-overlay">
+                            <div class="overlay-content">
+                                <a href="#" class="project-link">View Project →</a>
+                            </div>
+                        </div>
+                        <div class="project-glitch"></div>
+                    </div>
+                    <div class="project-info">
+                        <span class="project-number">02</span>
+                        <h3 class="project-title">Neural Network Viz</h3>
+                        <p class="project-description">Interactive visualization of machine learning models with real-time training animations.</p>
+                        <div class="project-tags">
+                            <span>WebGL</span>
+                            <span>TensorFlow.js</span>
+                            <span>GLSL</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 3 -->
+                <article class="project-card">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <span class="project-icon">🔮</span>
+                        </div>
+                        <div class="project-overlay">
+                            <div class="overlay-content">
+                                <a href="#" class="project-link">View Project →</a>
+                            </div>
+                        </div>
+                        <div class="project-glitch"></div>
+                    </div>
+                    <div class="project-info">
+                        <span class="project-number">03</span>
+                        <h3 class="project-title">AR Experience</h3>
+                        <p class="project-description">Augmented reality web app that brings digital art to life in physical spaces.</p>
+                        <div class="project-tags">
+                            <span>A-Frame</span>
+                            <span>AR.js</span>
+                            <span>WebXR</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 4 -->
+                <article class="project-card">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <span class="project-icon">⚡</span>
+                        </div>
+                        <div class="project-overlay">
+                            <div class="overlay-content">
+                                <a href="#" class="project-link">View Project →</a>
+                            </div>
+                        </div>
+                        <div class="project-glitch"></div>
+                    </div>
+                    <div class="project-info">
+                        <span class="project-number">04</span>
+                        <h3 class="project-title">Sound Visualizer</h3>
+                        <p class="project-description">Real-time audio visualization with reactive particles and frequency-based animations.</p>
+                        <div class="project-tags">
+                            <span>Web Audio</span>
+                            <span>Canvas</span>
+                            <span>GSAP</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <span class="section-tag closing">&lt;/projects&gt;</span>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">&lt;contact&gt;</span>
+                <h2 class="section-title glitch" data-text="GET IN TOUCH">GET IN TOUCH</h2>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p class="contact-intro">
+                        Ready to create something <span class="highlight">extraordinary</span>? 
+                        Let's connect and bring your vision to life.
+                    </p>
+                    <div class="contact-links">
+                        <a href="mailto:hello@example.com" class="contact-link">
+                            <span class="link-icon">✉</span>
+                            <span class="link-text">hello@example.com</span>
+                        </a>
+                        <a href="#" class="contact-link">
+                            <span class="link-icon">◈</span>
+                            <span class="link-text">GitHub</span>
+                        </a>
+                        <a href="#" class="contact-link">
+                            <span class="link-icon">◇</span>
+                            <span class="link-text">LinkedIn</span>
+                        </a>
+                        <a href="#" class="contact-link">
+                            <span class="link-icon">◆</span>
+                            <span class="link-text">Twitter</span>
+                        </a>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                        <div class="input-line"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="input-line"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="4" required></textarea>
+                        <div class="input-line"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Send Message</span>
+                        <span class="btn-glitch"></span>
+                    </button>
+                </form>
+            </div>
+            <span class="section-tag closing">&lt;/contact&gt;</span>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo glitch" data-text="DEV">DEV</div>
+                <p class="footer-text">© 2024 | Designed & Built with ❤️</p>
+                <div class="footer-decoration">
+                    <span class="decoration-line"></span>
+                    <span class="decoration-dot"></span>
+                    <span class="decoration-line"></span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Background Effects -->
+    <div class="bg-grid"></div>
+    <div class="bg-noise"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
