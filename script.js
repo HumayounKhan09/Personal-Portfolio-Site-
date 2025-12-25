@@ -6,9 +6,33 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initScrollAnimations();
     initEyeTracking();
+    initStaticParticles();
+    // initASCIIAnimation(); // Disabled - using Framer component
+    // initScreenGlitch(); // Disabled - using Framer component
     initGlitchEffects();
     initContactForm();
     initParallax();
+    initAccessSequence();
+    
+    // Immediate check to make about section visible if needed
+    setTimeout(() => {
+        const aboutSection = document.querySelector('#about.about');
+        if (aboutSection) {
+            // Simple scroll listener to make it visible
+            const makeAboutVisible = () => {
+                const scrollY = window.scrollY || window.pageYOffset;
+                if (scrollY > 100) { // After 100px scroll, make it visible
+                    aboutSection.classList.add('visible');
+                    aboutSection.style.setProperty('opacity', '1', 'important');
+                    aboutSection.style.setProperty('visibility', 'visible', 'important');
+                    aboutSection.style.setProperty('display', 'block', 'important');
+                }
+            };
+            
+            window.addEventListener('scroll', makeAboutVisible, { passive: true });
+            makeAboutVisible(); // Check immediately
+        }
+    }, 100);
 });
 
 // ===================================
@@ -101,72 +125,364 @@ function initScrollAnimations() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                
+                // Make about section visible when it comes into view (aggressive fallback)
+                if (entry.target.classList.contains('about')) {
+                    entry.target.classList.add('visible');
+                    // Force visibility with inline styles
+                    entry.target.style.setProperty('opacity', '1', 'important');
+                    entry.target.style.setProperty('visibility', 'visible', 'important');
+                    entry.target.style.setProperty('display', 'block', 'important');
+                    entry.target.style.setProperty('z-index', '10', 'important');
+                    console.log('About section made visible by intersection observer');
+                }
             }
         });
     }, observerOptions);
 
+    // Observe all sections to ensure they become visible
+    document.querySelectorAll('section').forEach(section => {
+        observer.observe(section);
+    });
+    
     document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
         observer.observe(el);
     });
+    
+        // Additional aggressive check for about section - make it visible when scrolled to
+        const aboutSection = document.querySelector('#about.about');
+        if (aboutSection) {
+            // Function to check and make visible
+            const checkAndShowAbout = () => {
+                const rect = aboutSection.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                const isInView = rect.top < viewportHeight * 1.2 && rect.bottom > -200;
+                
+                if (isInView) {
+                    aboutSection.classList.add('visible');
+                    aboutSection.style.setProperty('opacity', '1', 'important');
+                    aboutSection.style.setProperty('visibility', 'visible', 'important');
+                    aboutSection.style.setProperty('display', 'block', 'important');
+                    aboutSection.style.setProperty('z-index', '10', 'important');
+                    console.log('About section made visible - is in viewport');
+                    return true;
+                }
+                return false;
+            };
+            
+            // Check immediately on page load
+            setTimeout(checkAndShowAbout, 500);
+            
+            // Check on every scroll event
+            window.addEventListener('scroll', () => {
+                checkAndShowAbout();
+            }, { passive: true });
+            
+            // Also check on resize
+            window.addEventListener('resize', checkAndShowAbout, { passive: true });
+        } else {
+            console.error('About section not found in initScrollAnimations!');
+        }
 }
 
 // ===================================
 // Eye Tracking (follows mouse)
 // ===================================
+// Note: This function is disabled as we're using the Framer Tech Eye component
+// The component handles its own interactions
 function initEyeTracking() {
-    const eye = document.querySelector('.tech-eye');
-    const pupil = document.querySelector('.eye-pupil');
+    // The Framer Tech Eye component handles eye tracking internally
+    // No custom tracking needed
+    console.log('Using Framer Tech Eye component - eye tracking handled by component');
+}
+
+// ===================================
+// Static Particles - Flickering Specks
+// ===================================
+function initStaticParticles() {
+    const container = document.getElementById('staticParticles');
+    if (!container) return;
+
+    const particleCount = 80; // More particles for better visibility
+    
+    // Create particles distributed across the viewport
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'static-particle';
+        
+        // Random position across viewport
+        const x = Math.random() * 100; // Percentage
+        const y = Math.random() * 100; // Percentage
+        
+        particle.style.left = `${x}%`;
+        particle.style.top = `${y}%`;
+        
+        // Vary animation timing for random flicker effect
+        const flickerDelay = Math.random() * 4;
+        const floatDelay = Math.random() * 4;
+        const flickerDuration = 2 + Math.random() * 3;
+        const floatDuration = 4 + Math.random() * 2;
+        
+        particle.style.setProperty('--flicker-delay', `${flickerDelay}s`);
+        particle.style.setProperty('--float-delay', `${floatDelay}s`);
+        
+        // Apply animations with delays
+        particle.style.animation = 
+            `particle-flicker ${flickerDuration}s ease-in-out ${flickerDelay}s infinite, 
+             particle-float ${floatDuration}s ease-in-out ${floatDelay}s infinite`;
+        
+        // Random size variation for more visual interest
+        const size = 2.5 + Math.random() * 2.5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random brightness variation
+        const brightness = 0.7 + Math.random() * 0.3;
+        particle.style.filter = `brightness(${brightness})`;
+        
+        container.appendChild(particle);
+    }
+}
+
+// ===================================
+// ASCII Code Animation
+// ===================================
+function initASCIIAnimation() {
+    const canvas = document.getElementById('asciiCanvas');
     const iris = document.querySelector('.eye-iris');
     
-    if (!eye || !pupil) return;
+    if (!canvas || !iris) return;
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let currentX = 0;
-    let currentY = 0;
+    const irisRect = iris.getBoundingClientRect();
+    const size = 120; // Match iris width
+    canvas.width = size;
+    canvas.height = size;
+    
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#00ff88';
+    ctx.font = '7px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
 
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
+    // ASCII characters pool
+    const asciiChars = '01!@#$%^&*()_+-=[]{}|;:,.<>?/~`ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    
+    // Grid system
+    const cols = 12;
+    const rows = 12;
+    const cellWidth = size / cols;
+    const cellHeight = size / rows;
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const maxRadius = size / 2;
 
-    function animateEye() {
-        const eyeRect = eye.getBoundingClientRect();
-        const eyeCenterX = eyeRect.left + eyeRect.width / 2;
-        const eyeCenterY = eyeRect.top + eyeRect.height / 2;
-
-        const deltaX = mouseX - eyeCenterX;
-        const deltaY = mouseY - eyeCenterY;
-        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        
-        const maxMove = 15;
-        const angle = Math.atan2(deltaY, deltaX);
-        const moveDistance = Math.min(distance / 20, maxMove);
-        
-        const targetX = Math.cos(angle) * moveDistance;
-        const targetY = Math.sin(angle) * moveDistance;
-        
-        // Smooth interpolation
-        currentX += (targetX - currentX) * 0.1;
-        currentY += (targetY - currentY) * 0.1;
-        
-        pupil.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px))`;
-        iris.style.transform = `translate(calc(-50% + ${currentX * 0.5}px), calc(-50% + ${currentY * 0.5}px))`;
-        
-        requestAnimationFrame(animateEye);
+    // Grid cells state
+    const grid = [];
+    for (let y = 0; y < rows; y++) {
+        grid[y] = [];
+        for (let x = 0; x < cols; x++) {
+            grid[y][x] = {
+                char: '',
+                opacity: 0,
+                filled: false,
+                fadeOut: false,
+                fadeOpacity: 1
+            };
+        }
     }
 
-    animateEye();
+    // Calculate distance from center
+    function getDistanceFromCenter(x, y) {
+        const centerCellX = cols / 2;
+        const centerCellY = rows / 2;
+        const dx = x - centerCellX;
+        const dy = y - centerCellY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 
-    // Blink effect
+    // Check if cell is within circle
+    function isInCircle(x, y) {
+        const centerCellX = cols / 2;
+        const centerCellY = rows / 2;
+        const radius = cols / 2;
+        const dx = x - centerCellX;
+        const dy = y - centerCellY;
+        return (dx * dx + dy * dy) <= radius * radius;
+    }
+
+    let fillProgress = 0;
+    let isFadingOut = false;
+    let fadeProgress = 0;
+
+    function animate() {
+        // Clear canvas
+        ctx.clearRect(0, 0, size, size);
+        
+        // Draw circle mask
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, maxRadius, 0, Math.PI * 2);
+        ctx.clip();
+
+        // Fill from right to left, starting from outside edge
+        if (!isFadingOut && fillProgress < 1) {
+            fillProgress += 0.012; // Speed of filling
+            
+            // Fill cells column by column from right to left
+            const fillColumn = Math.floor(fillProgress * cols);
+            
+            // Fill cells from right to left
+            for (let x = cols - 1; x >= 0; x--) {
+                if (x >= cols - 1 - fillColumn) {
+                    for (let y = 0; y < rows; y++) {
+                        if (isInCircle(x, y) && !grid[y][x].filled) {
+                            grid[y][x].filled = true;
+                            grid[y][x].char = asciiChars[Math.floor(Math.random() * asciiChars.length)];
+                            grid[y][x].opacity = 0.7 + Math.random() * 0.3;
+                        }
+                    }
+                }
+            }
+
+            // Start fade out when fully filled
+            if (fillProgress >= 1) {
+                setTimeout(() => {
+                    isFadingOut = true;
+                    fillProgress = 0; // Reset for next cycle
+                }, 1000);
+            }
+        }
+
+        // Fade out effect
+        if (isFadingOut) {
+            fadeProgress += 0.02;
+            
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    if (grid[y][x].filled) {
+                        grid[y][x].fadeOpacity = Math.max(0, 1 - fadeProgress);
+                        
+                        // Random character change during fade
+                        if (Math.random() > 0.7) {
+                            grid[y][x].char = asciiChars[Math.floor(Math.random() * asciiChars.length)];
+                        }
+                    }
+                }
+            }
+
+            // Reset when fade complete
+            if (fadeProgress >= 1) {
+                // Clear grid
+                for (let y = 0; y < rows; y++) {
+                    for (let x = 0; x < cols; x++) {
+                        grid[y][x].filled = false;
+                        grid[y][x].opacity = 0;
+                        grid[y][x].fadeOpacity = 1;
+                    }
+                }
+                isFadingOut = false;
+                fadeProgress = 0;
+                fillProgress = 0;
+            }
+        }
+
+        // Draw characters
+        for (let y = 0; y < rows; y++) {
+            for (let x = 0; x < cols; x++) {
+                if (grid[y][x].filled) {
+                    const char = grid[y][x].char;
+                    const opacity = grid[y][x].opacity * grid[y][x].fadeOpacity;
+                    
+                    if (opacity > 0) {
+                        const pixelX = x * cellWidth + cellWidth / 2;
+                        const pixelY = y * cellHeight + cellHeight / 2;
+                        
+                        ctx.globalAlpha = opacity;
+                        ctx.fillText(char, pixelX, pixelY);
+                    }
+                }
+            }
+        }
+
+        ctx.restore();
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+}
+
+// ===================================
+// Screen Glitch Effects
+// ===================================
+function initScreenGlitch() {
+    const overlay = document.getElementById('screenGlitch');
+    if (!overlay) return;
+
+    function createScreenGlitch() {
+        // Clear previous glitches
+        overlay.innerHTML = '';
+        overlay.classList.add('active');
+
+        // Create multiple glitch elements
+        const glitchCount = 3 + Math.floor(Math.random() * 5);
+        
+        for (let i = 0; i < glitchCount; i++) {
+            setTimeout(() => {
+                const glitchType = Math.random() > 0.5 ? 'line' : 'block';
+                
+                if (glitchType === 'line') {
+                    const line = document.createElement('div');
+                    line.className = 'glitch-line';
+                    const direction = Math.random() > 0.5 ? 'horizontal' : 'vertical';
+                    
+                    if (direction === 'horizontal') {
+                        line.style.top = `${Math.random() * 100}%`;
+                        line.style.width = '100%';
+                        line.style.height = '2px';
+                        line.style.transform = `translateX(${(Math.random() - 0.5) * 50}px)`;
+                    } else {
+                        line.style.left = `${Math.random() * 100}%`;
+                        line.style.width = '2px';
+                        line.style.height = '100%';
+                        line.style.transform = `translateY(${(Math.random() - 0.5) * 50}px)`;
+                    }
+                    
+                    overlay.appendChild(line);
+                } else {
+                    const block = document.createElement('div');
+                    block.className = 'glitch-block';
+                    const size = 20 + Math.random() * 100;
+                    block.style.width = `${size}px`;
+                    block.style.height = `${size}px`;
+                    block.style.left = `${Math.random() * (window.innerWidth - size)}px`;
+                    block.style.top = `${Math.random() * (window.innerHeight - size)}px`;
+                    block.style.transform = `translate(${(Math.random() - 0.5) * 30}px, ${(Math.random() - 0.5) * 30}px) rotate(${Math.random() * 360}deg)`;
+                    
+                    overlay.appendChild(block);
+                }
+            }, i * 50);
+        }
+
+        // Remove glitch after animation
+        setTimeout(() => {
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                overlay.innerHTML = '';
+            }, 300);
+        }, 500);
+    }
+
+    // Trigger glitch periodically
     setInterval(() => {
         if (Math.random() > 0.7) {
-            eye.style.transform = 'scaleY(0.1)';
-            setTimeout(() => {
-                eye.style.transform = 'scaleY(1)';
-            }, 150);
+            createScreenGlitch();
         }
-    }, 3000);
+    }, 2000 + Math.random() * 3000);
+
+    // Also trigger on eye animation cycles
+    setTimeout(() => {
+        createScreenGlitch();
+    }, 8000);
 }
 
 // ===================================
@@ -375,8 +691,104 @@ window.addEventListener('load', () => {
     }, 300);
 });
 
+// ===================================
+// Welcome Transition (Hero to About)
+// ===================================
+function initAccessSequence() {
+    const welcomeOverlay = document.getElementById('welcomeOverlay');
+    const techEyeContainer = document.querySelector('.tech-eye-container');
+    const aboutSection = document.querySelector('#about.about');
+    
+    let hasTriggered = false;
+    
+    console.log('🚀 Welcome Transition Initialized');
+    console.log('Welcome overlay element:', welcomeOverlay);
+    
+    // Show WELCOME and transition to About
+    function showWelcomeAndTransition() {
+        if (hasTriggered) return;
+        hasTriggered = true;
+        
+        console.log('✨ SHOWING WELCOME TEXT NOW!');
+        
+        // Show welcome overlay
+        if (welcomeOverlay) {
+            welcomeOverlay.style.opacity = '1';
+            welcomeOverlay.style.visibility = 'visible';
+            welcomeOverlay.classList.add('active');
+            console.log('Welcome overlay activated');
+        } else {
+            console.error('Welcome overlay not found!');
+        }
+        
+        // After 2 seconds, fade out and go to about
+        setTimeout(() => {
+            console.log('📍 Fading out welcome, going to About');
+            
+            if (welcomeOverlay) {
+                welcomeOverlay.classList.add('fade-out');
+            }
+            
+            if (techEyeContainer) {
+                techEyeContainer.classList.add('fade-to-background');
+            }
+            
+            // After fade animation, hide and scroll
+            setTimeout(() => {
+                if (welcomeOverlay) {
+                    welcomeOverlay.style.opacity = '0';
+                    welcomeOverlay.style.visibility = 'hidden';
+                    welcomeOverlay.classList.remove('active', 'fade-out');
+                }
+                
+                if (aboutSection) {
+                    aboutSection.style.opacity = '1';
+                    aboutSection.style.visibility = 'visible';
+                    aboutSection.classList.add('visible');
+                    window.scrollTo({ top: aboutSection.offsetTop, behavior: 'smooth' });
+                }
+            }, 1000);
+            
+        }, 2000);
+    }
+    
+    // Trigger on ANY wheel scroll down
+    window.addEventListener('wheel', (e) => {
+        if (hasTriggered) return;
+        if (e.deltaY > 0) {
+            console.log('⬇️ Wheel scroll down detected!');
+            showWelcomeAndTransition();
+        }
+    }, { passive: true });
+    
+    // Trigger on scroll
+    window.addEventListener('scroll', () => {
+        if (hasTriggered) return;
+        if (window.scrollY > 30) {
+            console.log('📜 Scroll detected!');
+            showWelcomeAndTransition();
+        }
+    }, { passive: true });
+    
+    // Keyboard trigger
+    window.addEventListener('keydown', (e) => {
+        if (hasTriggered) return;
+        if (e.key === 'ArrowDown' || e.key === ' ') {
+            console.log('⌨️ Keyboard trigger!');
+            showWelcomeAndTransition();
+        }
+    });
+    
+    // CLICK anywhere to trigger (for testing)
+    document.body.addEventListener('click', () => {
+        if (hasTriggered) return;
+        console.log('🖱️ Click trigger!');
+        showWelcomeAndTransition();
+    });
+}
+
 // Console Easter Egg
 console.log('%c ⚡ Welcome to my portfolio! ⚡ ', 
-    'background: linear-gradient(90deg, #00ffff, #ff00ff); color: #000; font-size: 16px; padding: 10px; border-radius: 5px;');
+    'background: linear-gradient(90deg, #00ff88, #0088ff); color: #000; font-size: 16px; padding: 10px; border-radius: 5px;');
 console.log('%c Built with passion and a love for creative coding.', 
-    'color: #00ffff; font-size: 12px;');
+    'color: #00ff88; font-size: 12px;');

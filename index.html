@@ -8,10 +8,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Import Map for React JSX Runtime and Framer support -->
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18",
+            "react-dom": "https://esm.sh/react-dom@18",
+            "react/jsx-runtime": "https://esm.sh/react@18/jsx-runtime",
+            "react/jsx-dev-runtime": "https://esm.sh/react@18/jsx-dev-runtime",
+            "framer": "https://esm.sh/framer"
+        }
+    }
+    </script>
 </head>
 <body>
-    <!-- Scanlines overlay -->
-    <div class="scanlines"></div>
     
     <!-- Navigation -->
     <nav class="nav">
@@ -29,54 +40,29 @@
         </div>
     </nav>
 
+    <!-- Intro Text Overlay -->
+    <div class="intro-overlay" id="introOverlay">
+        <span class="intro-text">Hi, I'm Humayoun Khan</span>
+    </div>
+    
+    <!-- Welcome Overlay -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <span class="welcome-text">WELCOME</span>
+    </div>
+
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <!-- Tech Eye Background - Permanent Inlay -->
+        <div class="tech-eye-container">
+            <div class="tech-eye" id="techEyeMount"></div>
+        </div>
+
         <div class="hero-content">
-            <div class="tech-eye-container">
-                <div class="tech-eye">
-                    <div class="eye-outer">
-                        <div class="eye-ring ring-1"></div>
-                        <div class="eye-ring ring-2"></div>
-                        <div class="eye-ring ring-3"></div>
-                        <div class="eye-iris">
-                            <div class="iris-pattern"></div>
-                            <div class="eye-pupil">
-                                <div class="pupil-core"></div>
-                                <div class="pupil-glow"></div>
-                            </div>
-                        </div>
-                        <div class="eye-glitch"></div>
-                        <div class="eye-scanline"></div>
-                    </div>
-                    <div class="tech-circuits">
-                        <svg class="circuit-svg" viewBox="0 0 400 400">
-                            <defs>
-                                <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#ff00ff;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <path class="circuit-path" d="M200,50 L200,100 M200,300 L200,350" />
-                            <path class="circuit-path" d="M50,200 L100,200 M300,200 L350,200" />
-                            <path class="circuit-path" d="M80,80 L120,120 M280,280 L320,320" />
-                            <path class="circuit-path" d="M320,80 L280,120 M120,280 L80,320" />
-                            <circle class="circuit-node" cx="200" cy="50" r="4" />
-                            <circle class="circuit-node" cx="200" cy="350" r="4" />
-                            <circle class="circuit-node" cx="50" cy="200" r="4" />
-                            <circle class="circuit-node" cx="350" cy="200" r="4" />
-                            <circle class="circuit-node" cx="80" cy="80" r="3" />
-                            <circle class="circuit-node" cx="320" cy="80" r="3" />
-                            <circle class="circuit-node" cx="80" cy="320" r="3" />
-                            <circle class="circuit-node" cx="320" cy="320" r="3" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-text">
-                <p class="hero-subtitle typing-text">// WELCOME TO MY DIGITAL REALM</p>
+            
+            <div class="hero-text" id="heroText">
+                <p class="hero-subtitle">// AUTHORIZED PERSONNEL ONLY</p>
                 <h1 class="hero-title">
-                    <span class="glitch-text" data-text="CREATIVE">CREATIVE</span>
-                    <span class="glitch-text" data-text="DEVELOPER">DEVELOPER</span>
+                    <span class="glitch-text name-display" data-text="CREATIVE DEVELOPER">CREATIVE DEVELOPER</span>
                 </h1>
                 <p class="hero-description">
                     Building digital experiences that blur the line between 
@@ -91,12 +77,10 @@
                 </div>
             </div>
         </div>
-        <div class="scroll-indicator">
-            <div class="mouse">
-                <div class="wheel"></div>
-            </div>
-            <span>Scroll Down</span>
-        </div>
+        <!-- Screen Glitch Overlay -->
+        <div class="screen-glitch-overlay" id="screenGlitch"></div>
+        <!-- Static Particles Overlay -->
+        <div class="static-particles-overlay" id="staticParticles"></div>
     </section>
 
     <!-- About Section -->
@@ -355,6 +339,177 @@
     <div class="bg-grid"></div>
     <div class="bg-noise"></div>
 
-    <script src="script.js"></script>
+    <script type="module" src="main.js"></script>
+    
+    <!-- Intro + Welcome Transition Script -->
+    <script>
+    (function() {
+        let currentSection = 'hero';
+        let scrollStartY = 0;
+        let introShown = false;
+        let welcomeShown = false;
+        let isTransitioning = false;
+        let transitionStarted = false;
+        
+        const introOverlay = document.getElementById('introOverlay');
+        const welcomeOverlay = document.getElementById('welcomeOverlay');
+        const eye = document.querySelector('.tech-eye-container');
+        const about = document.querySelector('#about');
+        const hero = document.querySelector('#home');
+        
+        // Show WELCOME text first
+        function showWelcome() {
+            if (welcomeShown || isTransitioning) return;
+            welcomeShown = true;
+            
+            if (welcomeOverlay) {
+                welcomeOverlay.style.cssText = 'opacity:1 !important; visibility:visible !important; display:flex !important;';
+                welcomeOverlay.classList.add('active');
+                console.log('✅ WELCOME shown');
+            }
+        }
+        
+        // Show intro text and transition
+        function showIntroAndTransition(targetSection) {
+            if (introShown || isTransitioning) return;
+            introShown = true;
+            isTransitioning = true;
+            
+            // Hide welcome
+            if (welcomeOverlay) {
+                welcomeOverlay.style.cssText = 'opacity:0; visibility:hidden; transition: opacity 0.3s ease;';
+                welcomeOverlay.classList.remove('active');
+            }
+            
+            // Show intro
+            if (introOverlay) {
+                introOverlay.style.cssText = 'opacity:1 !important; visibility:visible !important; display:flex !important;';
+                introOverlay.classList.add('active');
+                console.log('✅ INTRO: Hi, I\'m Humayoun Khan - Transitioning to: ' + targetSection);
+            }
+            
+            // After 2 seconds, transition to target section
+            setTimeout(function() {
+                if (introOverlay) {
+                    introOverlay.style.cssText = 'opacity:0; visibility:hidden; transition: opacity 0.5s ease;';
+                    introOverlay.classList.remove('active');
+                }
+                
+                if (targetSection === 'about') {
+                    currentSection = 'about';
+                    if (eye) eye.classList.add('fade-to-background');
+                    if (about) {
+                        about.style.opacity = '1';
+                        about.style.visibility = 'visible';
+                        window.scrollTo({ top: about.offsetTop, behavior: 'smooth' });
+                    }
+                } else {
+                    currentSection = 'hero';
+                    if (eye) eye.classList.remove('fade-to-background');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                
+                // Reset after transition completes
+                setTimeout(function() {
+                    isTransitioning = false;
+                    introShown = false;
+                    welcomeShown = false;
+                    transitionStarted = false;
+                    scrollStartY = 0;
+                    console.log('🔄 Ready for next transition');
+                }, 1000);
+            }, 2000);
+        }
+        
+        // Continuous scroll monitoring (works with fast scrolling)
+        let lastScrollY = window.scrollY || 0;
+        let animationFrame = null;
+        
+        function monitorScroll() {
+            if (isTransitioning) {
+                if (animationFrame) cancelAnimationFrame(animationFrame);
+                return;
+            }
+            
+            const scrollY = window.scrollY || window.pageYOffset;
+            const aboutTop = about ? about.offsetTop : window.innerHeight;
+            const scrollDelta = Math.abs(scrollY - lastScrollY);
+            
+            // SCROLLING DOWN from hero
+            if (currentSection === 'hero' && scrollY > 0) {
+                if (!transitionStarted) {
+                    transitionStarted = true;
+                    scrollStartY = 0; // Start from top of hero
+                }
+                
+                const scrollDistance = scrollY - scrollStartY;
+                
+                // At 200px - show WELCOME first
+                if (scrollDistance >= 200 && !welcomeShown) {
+                    showWelcome();
+                }
+                
+                // At 350px - show intro and transition to about (works even if scrolled fast)
+                if (scrollDistance >= 350 && !introShown) {
+                    showIntroAndTransition('about');
+                }
+            }
+            
+            // SCROLLING UP from about (when near top)
+            if (currentSection === 'about' && scrollY < aboutTop - 100) {
+                if (!transitionStarted) {
+                    transitionStarted = true;
+                    scrollStartY = aboutTop - 100;
+                }
+                
+                const scrollDistance = scrollStartY - scrollY;
+                
+                // At 200px up - show WELCOME first
+                if (scrollDistance >= 200 && !welcomeShown) {
+                    showWelcome();
+                }
+                
+                // At 350px up - show intro and transition to hero (works even if scrolled fast)
+                if (scrollDistance >= 350 && !introShown) {
+                    showIntroAndTransition('hero');
+                }
+            }
+            
+            // Reset if scrolled away from transition zone
+            if (currentSection === 'about' && scrollY >= aboutTop - 50) {
+                transitionStarted = false;
+                scrollStartY = 0;
+            }
+            if (currentSection === 'hero' && scrollY === 0) {
+                transitionStarted = false;
+                scrollStartY = 0;
+            }
+            
+            lastScrollY = scrollY;
+            animationFrame = requestAnimationFrame(monitorScroll);
+        }
+        
+        // Start continuous monitoring
+        animationFrame = requestAnimationFrame(monitorScroll);
+        
+        // Also listen to scroll events for immediate response
+        window.addEventListener('scroll', function() {
+            monitorScroll();
+        }, { passive: true });
+        
+        // Listen to wheel for fast scroll detection
+        window.addEventListener('wheel', function(e) {
+            monitorScroll();
+        }, { passive: true });
+        
+        // Initialize
+        window.addEventListener('load', function() {
+            if (about && window.scrollY > about.offsetTop - 200) {
+                currentSection = 'about';
+            }
+            console.log('🚀 Transition script loaded. Current section:', currentSection);
+        });
+    })();
+    </script>
 </body>
 </html>
